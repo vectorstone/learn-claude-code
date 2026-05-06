@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Web app
 
-## Getting Started
+This app is a static-exported Next.js site that can be deployed to GitHub Pages.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+The static output is generated in `out/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy to GitHub Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This repository includes `.github/workflows/deploy-pages.yml`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Enable GitHub Pages
 
-## Deploy on Vercel
+In the GitHub repository:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Go to **Settings -> Pages**
+- Set **Source** to **GitHub Actions**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2. Push to `main`
+
+Any push to `main` will:
+
+- install dependencies in `web/`
+- run `npm run build`
+- upload `web/out`
+- deploy it to GitHub Pages
+
+### 3. Configure a custom domain
+
+For GitHub Pages deployed via **custom workflows / GitHub Actions**, configure the domain in GitHub settings instead of committing a `CNAME` file.
+
+In **Settings -> Pages**:
+
+- set **Custom domain** to your domain, for example `docs.example.com`
+- enable **Enforce HTTPS** after DNS has propagated
+
+DNS setup:
+
+- for a subdomain like `docs.example.com`, create a `CNAME` record pointing to `<your-github-username>.github.io`
+- for an apex/root domain like `example.com`, use GitHub Pages `A` records, and usually add `www` as a `CNAME` to `<your-github-username>.github.io`
+
+## Notes
+
+- The app uses `output: "export"` and `trailingSlash: true` in `next.config.ts`
+- The root route redirects to `/en/`
+- This setup is intended for custom-domain or user-site style hosting from the domain root
+- If you later want to serve it under a repository subpath such as `/repo-name/`, you will need additional `basePath` / `assetPrefix` adjustments
