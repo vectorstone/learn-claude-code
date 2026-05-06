@@ -32,7 +32,15 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
 
+      - name: Configure GitHub Pages (auto-enable when admin token is present)
+        if: ${{ secrets.PAGES_ADMIN_TOKEN != '' }}
+        uses: actions/configure-pages@v5
+        with:
+          token: ${{ secrets.PAGES_ADMIN_TOKEN }}
+          enablement: true
+
       - name: Configure GitHub Pages
+        if: ${{ secrets.PAGES_ADMIN_TOKEN == '' }}
         uses: actions/configure-pages@v5
 
       - name: Install dependencies

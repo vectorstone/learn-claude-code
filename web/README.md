@@ -29,6 +29,7 @@ In the GitHub repository:
 
 - Go to **Settings -> Pages**
 - Set **Source** to **GitHub Actions**
+- If the repository has never enabled Pages before, either enable it once in **Settings -> Pages** or add a `PAGES_ADMIN_TOKEN` repository secret so the workflow can auto-enable Pages for you
 
 ### 2. Push to `main`
 
